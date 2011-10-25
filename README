@@ -1,0 +1,12 @@
+upgp - command line UI around pgcrypto
+--------------------------------------
+
+This is mainly used for pgcrypto testing, but can used
+as standalone PGP/crypto tool
+
+Note: pgcrypto is crypto module for PostgreSQL.
+
+To build you need PostgreSQL sources, then set
+variable pg_top to point there, either by
+editing Makefile or giving it on command-line.
+

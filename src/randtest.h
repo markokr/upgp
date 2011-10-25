@@ -1,0 +1,4 @@
+
+int randtest(int rtype);
+
+
