@@ -104,6 +104,26 @@ const char *bin2hex(uint8 *bin, int len)
 
 static int crypt_cmd(const char *password)
 {
+	char sbuf[128], cbuf[1024];
+	const char *salt = sbuf, *cpsw;
+	int res = 0;
+
+	if (crypt_salt) {
+		salt = crypt_salt;
+	} else {
+		res = px_gen_salt(crypt_salt_type, sbuf, 0);
+		if (res < 0) {
+			fprintf(stderr, "px_gen_salt failed: %s\n", px_strerror(res));
+			return 1;
+		}
+	}
+
+	cpsw = px_crypt(password, salt, cbuf, sizeof(cbuf));
+	if (!cpsw) {
+		fprintf(stderr, "px_crypt failed: %s\n", strerror(errno));
+		return 1;
+	}
+	printf("%s\n", cpsw);
 	return 0;
 }
 
@@ -441,8 +461,7 @@ enum {
 	SW_CONVERT_CRLF_ON,
 	SW_CONVERT_CRLF_OFF,
 
-	CMD_TEST_HAVEGE,
-	CMD_TEST_PXRAND,
+	CMD_TEST_RAND,
 };
 
 static const struct option upgp_opt_list[] = {
